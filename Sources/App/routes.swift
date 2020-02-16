@@ -11,7 +11,9 @@ public func routes(_ router: Router) throws {
     router.get("hello") { req in
         return "Hello, world!"
     }
+    
+    let authController = AuthController()
 
-    // Example of configuring a controller
+    router.post("register", use: authController.register)
     
 }
