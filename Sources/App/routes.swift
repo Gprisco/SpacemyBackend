@@ -15,5 +15,6 @@ public func routes(_ router: Router) throws {
     let authController = AuthController()
 
     router.post("register", use: authController.register)
-    
+    router.post("login", use: authController.login)
+    router.delete("logout", use: authController.logout)
 }
