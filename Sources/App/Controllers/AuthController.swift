@@ -42,7 +42,5 @@ final class AuthController {
                 return HTTPStatus.notAcceptable
             }
         }
-    }
-    
-    func login(_ req: Request) throws ->
+    }    
 }
