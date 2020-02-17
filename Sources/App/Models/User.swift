@@ -15,6 +15,11 @@ final class User: PostgreSQLModel {
     var name: String
     var surname: String
     var password: String
+    
+    var events: Siblings<User, Event, UserEventPivot> {
+        return siblings()
+    }
+    
     init(identifier: Int, name: String, surname: String, password: String) {
         self.identifier = identifier
         self.name = name
@@ -22,8 +27,6 @@ final class User: PostgreSQLModel {
         self.password = password
     }
 }
-
-
 
 extension User: Migration {}
 

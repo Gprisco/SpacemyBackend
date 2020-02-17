@@ -12,9 +12,17 @@ public func routes(_ router: Router) throws {
         return "Hello, world!"
     }
     
+    ///Authentication routes
     let authController = AuthController()
 
     router.post("register", use: authController.register)
     router.post("login", use: authController.login)
     router.delete("logout", use: authController.logout)
+    
+    ///Event routes
+    let eventController = EventController()
+    
+    router.get("events", use: eventController.getEvents)
+    router.get("events", Event.parameter, use: eventController.getEvent)
+    router.post("events/create", use: eventController.createEvent)
 }

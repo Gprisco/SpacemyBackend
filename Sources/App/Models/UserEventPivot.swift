@@ -14,7 +14,6 @@ final class UserEventPivot: PostgreSQLUUIDPivot {
     
     var userID: User.ID
     var eventID: Event.ID
-
     
     typealias Left = User
     typealias Right = Event
@@ -22,14 +21,13 @@ final class UserEventPivot: PostgreSQLUUIDPivot {
     static let leftIDKey: LeftIDKey = \.userID
     static let rightIDKey: RightIDKey = \.eventID
     
-    init (_ user:User, _ event: Event) throws {
+    init(_ user: User, _ event: Event) throws {
         self.userID = try user.requireID()
         self.eventID = try event.requireID()
-//        self.book_time = book_time
     }
 }
 
-extension UserEventPivot: Migration{
+extension UserEventPivot: Migration {
     static func prepare(on connection: PostgreSQLConnection) -> Future<Void> {
         return Database.create(self, on:connection) { builder in
             try addProperties(to: builder)
@@ -38,6 +36,3 @@ extension UserEventPivot: Migration{
         }
     }
 }
-extension UserEventPivot: ModifiablePivot{}
-
-

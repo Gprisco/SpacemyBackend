@@ -19,7 +19,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     
 //    Setup Database Configuration
     
-    let databaseConfig = PostgreSQLDatabaseConfig (hostname: "localhost", port: 5432, username: "studentuser", database: "studentdb")
+    let databaseConfig = PostgreSQLDatabaseConfig (hostname: "localhost", port: 5432, username: "academyguy", database: "spacemy")
 
     // Configure a SQLite database
     let postgre = PostgreSQLDatabase(config: databaseConfig)

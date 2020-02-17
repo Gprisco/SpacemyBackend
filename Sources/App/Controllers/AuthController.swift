@@ -10,15 +10,13 @@ import JWT
 import Vapor
 import Crypto
 
-let secretKey = "superS3cr3tK3yw0rD"
-let hashRounds = 5
-
 struct UserRequest: Content {
     var identifier: Int
     var password: String
 }
 
 struct UserPayload: JWTPayload {
+    var id: Int
     var identifier: Int
     var name: String
     var surname: String
@@ -29,6 +27,9 @@ struct UserPayload: JWTPayload {
 }
 
 final class AuthController {
+    let secretKey = "superS3cr3tK3yw0rD"
+    let hashRounds = 5
+    
     func register(_ req: Request) throws -> Future<HTTPStatus> {
         
         //Decode the request, check if the request is from an academy guy by looking for his reg.id
@@ -44,7 +45,7 @@ final class AuthController {
                     //If the guy is from the academy, continue with the registration
                     if foundAcademyGuy.count > 0 && foundUser.count == 0 {
                         do {
-                            let hash = try BCrypt.hash(academyGuy.password, cost: hashRounds)
+                            let hash = try BCrypt.hash(academyGuy.password, cost: self.hashRounds)
                             
                             let newUser = User(identifier: foundAcademyGuy[0].identifier, name: foundAcademyGuy[0].name, surname: foundAcademyGuy[0].surname, password: hash)
                             
@@ -74,9 +75,9 @@ final class AuthController {
                     let isValid = try BCrypt.verify(user.password, created: foundUser[0].password)
                     
                     if isValid {
-                        let payload = UserPayload(identifier: foundUser[0].identifier, name: foundUser[0].name, surname: foundUser[0].surname)
+                        let payload = UserPayload(id: foundUser[0].id!, identifier: foundUser[0].identifier, name: foundUser[0].name, surname: foundUser[0].surname)
                         
-                        let token = try String(data: JWT(payload: payload).sign(using: .hs256(key: secretKey)), encoding: .utf8) ?? ""
+                        let token = try String(data: JWT(payload: payload).sign(using: .hs256(key: self.secretKey)), encoding: .utf8) ?? ""
                         
                         if token != "" {
                             Token(token_string: token).save(on: req)
@@ -109,6 +110,16 @@ final class AuthController {
             }
             
             throw Abort(.unauthorized)
+        }
+    }
+    
+    func isUserAuthenticated(_ req: Request) throws -> Future<Bool> {
+        guard let token = req.http.headers.bearerAuthorization else {
+            throw Abort(.unauthorized)
+        }
+        
+        return Token.query(on: req).filter(\.token_string == token.token).all().map { token in
+            return token.count > 0
         }
     }
 }
