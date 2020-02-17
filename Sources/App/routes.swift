@@ -25,4 +25,10 @@ public func routes(_ router: Router) throws {
     router.get("events", use: eventController.getEvents)
     router.get("events", Event.parameter, use: eventController.getEvent)
     router.post("events/create", use: eventController.createEvent)
+    
+    ///Category routes
+    let categoryController = CategoryController()
+    
+    router.get("categories", use: categoryController.getCategories)
+    router.get("categories", Category.parameter, use: categoryController.getCategory)
 }
