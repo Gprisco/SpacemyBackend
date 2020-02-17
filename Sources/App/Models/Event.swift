@@ -15,18 +15,20 @@ final class Event: PostgreSQLModel {
     var category_id: Int
     var creator_id: Int
     var collab_id: Int
+    var duration_hour: Int
     var event_date: Date
     
     var users: Siblings<Event, User, UserEventPivot> {
         return siblings()
     }
     
-    init(category_id: Category.ID, name: String, creator_id: Int, event_data: Date, collabID: Collab.ID) {
+    init(category_id: Category.ID, name: String, creator_id: Int, event_data: Date, collabID: Collab.ID, duration_hour: Int) {
         self.name = name
         self.category_id = category_id
         self.creator_id = creator_id
         self.event_date = event_data
         self.collab_id = collabID
+        self.duration_hour = duration_hour
     }
 }
 

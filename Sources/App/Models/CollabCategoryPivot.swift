@@ -13,7 +13,6 @@ final class CollabCategoryPivot: PostgreSQLUUIDPivot {
     
     var collabID: Collab.ID
     var categoryID: Category.ID
-
     
     typealias Left = Collab
     typealias Right = Category

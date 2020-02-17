@@ -12,6 +12,11 @@ import FluentPostgreSQL
 final class Collab: PostgreSQLModel {
     var id: Int?
     var spots: Int
+    
+    var categories: Siblings<Collab, Category, CollabCategoryPivot> {
+        return siblings()
+    }
+    
     init(spots: Int) {
         self.spots = spots
     }

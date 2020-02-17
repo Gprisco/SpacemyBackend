@@ -37,4 +37,6 @@ public func routes(_ router: Router) throws {
     
     router.get("collabs",use: collabController.getCollabs)
     router.get("collabs", Collab.parameter, use: collabController.getCollab)
+    router.get("suggestedCollabs", use: collabController.getCollabForActivity)
+//    router.post("temp", use: collabController.associateCollabCategory)
 }
