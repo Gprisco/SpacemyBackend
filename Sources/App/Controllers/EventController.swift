@@ -52,4 +52,22 @@ final class EventController {
             throw Abort(.unauthorized)
         }
     }
+    
+    func participate(_ req: Request) throws -> Future<HTTPStatus> {
+        return try authController.isUserAuthenticated(req).flatMap { isAuthenticated in
+            if isAuthenticated {
+                let user = try JWT<UserPayload>(from: req.http.headers.bearerAuthorization!.token, verifiedUsing: .hs256(key: self.authController.secretKey))
+                
+                return try req.parameters.next(Event.self).map { event in
+                    User.find(user.payload.id, on: req).map { user in
+                        try UserEventPivot(user!, event).save(on: req)
+                    }
+                    
+                    return HTTPStatus.ok
+                }
+            }
+            
+            throw Abort(.unauthorized)
+        }
+    }
 }
