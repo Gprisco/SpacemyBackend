@@ -31,4 +31,10 @@ public func routes(_ router: Router) throws {
     
     router.get("categories", use: categoryController.getCategories)
     router.get("categories", Category.parameter, use: categoryController.getCategory)
+    
+    ///Collab routes
+    let collabController = CollabController()
+    
+    router.get("collabs",use: collabController.getCollabs)
+    router.get("collabs", Collab.parameter, use: collabController.getCollab)
 }
