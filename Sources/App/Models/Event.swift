@@ -34,8 +34,6 @@ final class Event: PostgreSQLModel {
     }
 }
 
-
-
 extension Event: Migration {
     static func prepare (
         on connection: PostgreSQLConnection

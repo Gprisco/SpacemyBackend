@@ -15,7 +15,7 @@ final class EventController {
     func getEvents(_ req: Request) throws -> Future<[Event]> {
         return try authController.isUserAuthenticated(req).flatMap { isAuthenticated in
             if isAuthenticated {
-                return Event.query(on: req).filter(\.event_date >= Date()).all()
+                return Event.query(on: req).filter(\.event_date >= Date()).filter(\.category_id != 2).all()
             }
             
             throw Abort(.unauthorized)
