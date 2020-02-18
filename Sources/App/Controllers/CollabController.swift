@@ -58,7 +58,9 @@ final class CollabController {
                                     
                                     let advancedDate = Date(timeInterval: TimeInterval(collabRequest.durationHour * 3600), since: collabRequest.date)
                                     
-                                    return Event.query(on: req).filter(\.event_date >= collabRequest.date).filter(\.event_date <= advancedDate).all().map { events in
+                                    return Event.query(on: req).group(.or) {
+                                        $0.filter(\.event_date >= collabRequest.date).filter(\.event_date <= advancedDate)
+                                    }.all().map { events in
                                         var freeCollabs = collabs
                                         
                                         for event in events {
