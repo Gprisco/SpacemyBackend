@@ -8,7 +8,6 @@
 import Vapor
 import FluentPostgreSQL
 
-
 final class User: PostgreSQLModel {
     var id: Int?
     var identifier: Int
