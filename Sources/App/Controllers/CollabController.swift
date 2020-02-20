@@ -59,7 +59,13 @@ final class CollabController {
                                     let advancedDate = Date(timeInterval: TimeInterval(collabRequest.durationHour * 3600), since: collabRequest.date)
                                     
                                     return Event.query(on: req).group(.or) {
-                                        $0.filter(\.event_date >= collabRequest.date).filter(\.event_date <= advancedDate)
+                                        $0.group(.and) {
+                                            $0.filter(\.event_date >= collabRequest.date).filter(\.finish_date <= advancedDate)
+                                        }.group(.and) {
+                                            $0.filter(\.event_date <= collabRequest.date).filter(\.finish_date <= advancedDate).filter(\.finish_date >= collabRequest.date)
+                                        }.group(.and) {
+                                            $0.filter(\.event_date >= collabRequest.date).filter(\.event_date <= advancedDate).filter(\.finish_date >= advancedDate)
+                                        }
                                     }.all().map { events in
                                         var freeCollabs = collabs
                                         
@@ -84,15 +90,15 @@ final class CollabController {
         }
     }
     
-//    func associateCollabCategory(_ req: Request) throws -> Future<HTTPStatus> {
-//        try req.content.decode(temp.self).flatMap { request in
-//            Collab.find(request.collabId, on: req).flatMap { collab in
-//                Category.find(request.categoryId, on: req).map { category in
-//                    try CollabCategoryPivot(collab!, category!).save(on: req)
-//
-//                    return HTTPStatus.ok
-//                }
-//            }
-//        }
-//    }
+    //    func associateCollabCategory(_ req: Request) throws -> Future<HTTPStatus> {
+    //        try req.content.decode(temp.self).flatMap { request in
+    //            Collab.find(request.collabId, on: req).flatMap { collab in
+    //                Category.find(request.categoryId, on: req).map { category in
+    //                    try CollabCategoryPivot(collab!, category!).save(on: req)
+    //
+    //                    return HTTPStatus.ok
+    //                }
+    //            }
+    //        }
+    //    }
 }
